@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import logStatus from '../utils/logStatus';
 import { validatePassword } from '../service/user.service';
-import { createSessionService } from '../service/session.service';
+import { createSessionService, findSessions } from '../service/session.service';
 import { signJwt } from '../utils/jwt.utils';
 import config from 'config';
 
-async function createUserSessionController(req: Request, res: Response) {
+export async function createUserSessionController(req: Request, res: Response) {
     try {
         // Validate users password
         const user = await validatePassword(req.body)
@@ -30,11 +30,11 @@ async function createUserSessionController(req: Request, res: Response) {
         const refreshToken = signJwt({
             ...user,
             session: session._id,
-            expiresIn: config.get<string>('refreshToeknTtl')
+            expiresIn: config.get<string>('refreshTokenTtl')
         });
 
         // return access & refresh token
-        return res.send({
+        return res.status(200).json({
             accessToken, refreshToken
         })
 
@@ -44,4 +44,15 @@ async function createUserSessionController(req: Request, res: Response) {
     }
 }
 
-export default createUserSessionController;
+export async function getUserSessionController(req: Request, res: Response) {
+    try {
+        const userId = res.locals.user._id;
+
+        const sessions = await findSessions({ user: userId, valid: true });
+        return res.send(sessions);
+
+    } catch (error) {
+        logStatus.error('getSession Controller errored');
+
+    }
+}

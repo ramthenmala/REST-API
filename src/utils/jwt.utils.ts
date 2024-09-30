@@ -14,18 +14,24 @@ export function signJwt(object: Object, options?: jwt.SignOptions | undefined) {
 
 export function verifyJwt(token: string) {
     try {
+
+        if (!pbcKey) {
+            throw new Error('Public key not configured properly.');
+        }
+        
         const decoded = jwt.verify(token, pbcKey);
         return {
             valid: true,
             expired: false,
             decoded
-        }
+        };
     } catch (error: any) {
-        logStatus.error('JWT Expired');
+        logStatus.error(`JWT Verification Error: ${error.message}`);
+
         return {
             valid: false,
-            expired: error.message === 'JWT Expired',
+            expired: error.message === 'jwt expired',
             decoded: null
-        }
+        };
     }
 }
