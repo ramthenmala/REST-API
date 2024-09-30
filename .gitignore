@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+.pnp/
+.pnp.js
+.pnpm-debug.log*
+
+# Build files (if you're compiling your code)
+dist/
+build/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.*.local
+
+# Lock files
+package-lock.json
+yarn.lock
+.pnpm-lock.yaml
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# TypeScript specific
+*.tsbuildinfo
