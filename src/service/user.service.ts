@@ -1,5 +1,6 @@
 import UserModel from '../models/user.model';
 import { CreateUserInput } from '../types/ICreateUserInput';
+import { IUserDocument } from '../types/IUserDocument';
 import logStatus from '../utils/logStatus';
 
 export async function createUserService(input: CreateUserInput) {
@@ -9,4 +10,19 @@ export async function createUserService(input: CreateUserInput) {
         logStatus.error(e);
         throw new Error(e)
     }
+}
+
+export async function validatePassword({ email, password }: Pick<IUserDocument, 'email' | 'password'>) {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+        return false
+    }
+
+    const isValid = await user.comparePassword(password);
+
+    if (!isValid) return false;
+
+    const { password: omittedPassword, ...userWithoutPassword } = user.toObject();
+
+    return userWithoutPassword;
 }

@@ -36,11 +36,11 @@
     "typescript": "^5.6.2"
   },
   "resolutions": {
-    "glob": "^10.3.1",         
+    "glob": "^10.3.1",
     "rimraf": "3.0.2",
-    "gauge": "^5.0.0",         
-    "inflight": "^2.0.0",      
-    "npmlog": "^6.0.0",        
-    "are-we-there-yet": "^3.0.0" 
+    "gauge": "^5.0.0",
+    "inflight": "^2.0.0",
+    "npmlog": "^6.0.0",
+    "are-we-there-yet": "^3.0.0"
   }
 }

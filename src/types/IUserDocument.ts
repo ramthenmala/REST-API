@@ -6,5 +6,5 @@ export interface IUserDocument extends mongoose.Document {
     password: string;
     createdAt: Date;
     updatedAt: Date;
-    candidatePassword(candidatePassword: string): Promise<Boolean>;
+    comparePassword(candidatePassword: string): Promise<Boolean>;
 }

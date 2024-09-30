@@ -3,7 +3,7 @@ import logStatus from '../utils/logStatus';
 import { createUserService } from '../service/user.service';
 import { CreateUserInput } from '../types/ICreateUserInput';
 
-async function createUserController(req: Request<{}, {}, CreateUserInput['body']>, res: Response) {
+async function createUserController(req: Request<{}, {}, CreateUserInput>, res: Response) {
     try {
         const user = await createUserService(req.body);
         
