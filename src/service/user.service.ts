@@ -13,16 +13,21 @@ export async function createUserService(input: CreateUserInput) {
 }
 
 export async function validatePassword({ email, password }: Pick<IUserDocument, 'email' | 'password'>) {
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-        return false
+    try {
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return false
+        }
+
+        const isValid = await user.comparePassword(password);
+
+        if (!isValid) return false;
+
+        const { password: omittedPassword, ...userWithoutPassword } = user.toObject();
+
+        return userWithoutPassword;
+
+    } catch (error) {
+        console.log(error)
     }
-
-    const isValid = await user.comparePassword(password);
-
-    if (!isValid) return false;
-
-    const { password: omittedPassword, ...userWithoutPassword } = user.toObject();
-
-    return userWithoutPassword;
 }

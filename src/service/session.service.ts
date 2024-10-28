@@ -6,7 +6,7 @@ import { ISessionDocument } from '../types/ISessionDocument';
 export async function createSessionService(userId: string, userAgent: string) {
     try {
         const session = await SessionModel.create({ user: userId, userAgent });
-        return session ? session.toObject() : null;
+        return session;
     } catch (e: any) {
         logStatus.error('Error creating session:', e.message);
         throw new Error('Could not create session');

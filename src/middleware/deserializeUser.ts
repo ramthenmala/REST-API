@@ -1,25 +1,27 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express';
 import { verifyJwt } from '../utils/jwt.utils';
+import { get } from 'lodash';
 
-const deserializeUser = (req: Request, res: Response, next: NextFunction) => {
-    const authorizationHeader = req.headers.authorization;
+const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const accessToken = get(req, 'headers.authorization', '').replace(/^Bearer\s/, '');
 
-    let accessToken = null;
+        if (!accessToken) {
+            return next();
+        }
 
-    if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
-        accessToken = authorizationHeader.split(' ')[1];
-    }
+        const { decoded, expired } = verifyJwt(accessToken);
 
-    if (!accessToken) {
+        if (decoded) {
+            res.locals.user = decoded;
+            return next();
+        }
+
+        return next();
+    } catch (error) {
+        console.error('Error during JWT deserialization:', error);
         return next();
     }
-
-    const { decoded, expired } = verifyJwt(accessToken);
-
-    if (decoded) {
-        res.locals.user = decoded;
-    }
-    return next();
-}
+};
 
 export default deserializeUser;

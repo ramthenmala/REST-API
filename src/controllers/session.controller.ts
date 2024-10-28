@@ -1,19 +1,21 @@
 import { Request, Response } from 'express';
+import config from 'config';
 import logStatus from '../utils/logStatus';
 import { validatePassword } from '../service/user.service';
 import { createSessionService, findSessions } from '../service/session.service';
 import { signJwt } from '../utils/jwt.utils';
-import config from 'config';
 
 export async function createUserSessionController(req: Request, res: Response) {
     try {
         // Validate users password
         const user = await validatePassword(req.body)
+
         if (!user) {
             return res.status(401).send('Invalid Email or Password')
         }
 
         // create a session
+        // const session = await createSessionService(user._id as string, req.get('user-agent') as string || '')
         const session = await createSessionService(user._id as string, req.get('user-agent') as string || '')
 
         if (!session) {
@@ -21,21 +23,30 @@ export async function createUserSessionController(req: Request, res: Response) {
         }
 
         // create an access token
-        const accessToken = signJwt({
-            ...user,
-            session: session._id,
-            expiresIn: config.get<string>('accessTokenTtl')
-        });
+        const accessToken = signJwt(
+            {
+                ...user,
+                session: session._id,
+            },
+            {
+                expiresIn: config.get<string>('accessTokenTtl'),
+            }
+        );
+
         // create a refresh token
-        const refreshToken = signJwt({
-            ...user,
-            session: session._id,
-            expiresIn: config.get<string>('refreshTokenTtl')
-        });
+        const refreshToken = signJwt(
+            {
+                ...user,
+                session: session._id,
+            },
+            {
+                expiresIn: config.get<string>('refreshTokenTtl')
+            });
 
         // return access & refresh token
-        return res.status(200).json({
-            accessToken, refreshToken
+        return res.send({
+            accessToken,
+            refreshToken
         })
 
     } catch (e: any) {
@@ -44,15 +55,18 @@ export async function createUserSessionController(req: Request, res: Response) {
     }
 }
 
+
 export async function getUserSessionController(req: Request, res: Response) {
     try {
         const userId = res.locals.user._id;
+        console.log('User ID:', userId);
+        const sessions = await findSessions({ user: userId, valid: false });
 
-        const sessions = await findSessions({ user: userId, valid: true });
+        console.log('User Sessions:', sessions);
+
         return res.send(sessions);
-
-    } catch (error) {
-        logStatus.error('getSession Controller errored');
-
+    } catch (error: any) {
+        logStatus.error('Get User Session Controller Error: ' + error.message);
+        return res.status(500).send({ message: 'Error retrieving sessions' });
     }
 }
