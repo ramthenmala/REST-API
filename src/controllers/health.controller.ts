@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import logStatus from "../utils/logStatus";
 
-const healthController = (_: Request, res: Response): Response | void => {
+const healthHandler = (_: Request, res: Response): Response | void => {
     try {
         return res.status(200).json({ status: 'OK' });
     } catch (error: any) {
@@ -10,4 +10,4 @@ const healthController = (_: Request, res: Response): Response | void => {
     }
 };
 
-export default healthController;
+export default healthHandler;
