@@ -1,5 +1,3 @@
-// src/models/user.repository.ts
-
 import { IUser } from "../types/user.interface";
 import { UserModel } from "./user.model";
 
