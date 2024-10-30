@@ -1,6 +1,14 @@
 import { Request, Response } from "express";
-import { getUserById } from "../../db/users";
+import { getUserById } from "../../models/user.model";
 
+/**
+ * Handles the update of a user's username based on the user ID provided in the request parameters.
+ * 
+ * @param req - The request object containing the user ID in the parameters and the new username in the body.
+ * @param res - The response object used to send responses back to the client.
+ * 
+ * @returns A JSON response indicating the outcome of the update request.
+ */
 const updateUserHandler = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;

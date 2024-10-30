@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 import connect from './utils/connect';
 import logStatus from './utils/logStatus';
-import routes from './routes';
+import routes from './routes/routes';
 
 dotenv.config();
 

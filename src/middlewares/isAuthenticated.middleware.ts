@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { merge } from 'lodash';
-import { getUserBySessionToken } from '../db/users';
 import logStatus from '../utils/logStatus';
+import { getUserBySessionToken } from '../models/user.repository';
 
 /**
  * Middleware to check if a user is authenticated based on their session token.

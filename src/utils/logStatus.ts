@@ -1,6 +1,9 @@
 import logger from 'pino';
 import dayjs from 'dayjs';
 
+/**
+ * Configure the logger using pino
+ */
 const logStatus = logger({
     transport: {
         target: 'pino-pretty',

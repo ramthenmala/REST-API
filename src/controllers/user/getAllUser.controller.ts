@@ -1,7 +1,15 @@
 import { Request, Response } from "express";
-import { getUsers } from "../../db/users";
+import { getUsers } from "../../models/user.model";
 
-const getAllUsersHanlder = async (req: Request, res: Response) => {
+/**
+ * Handles the retrieval of all user accounts.
+ * 
+ * @param req - The request object used to handle the incoming request.
+ * @param res - The response object used to send responses back to the client.
+ * 
+ * @returns A JSON response containing the list of users or an error message.
+ */
+const getAllUsersHanlder = async (_: Request, res: Response) => {
     try {
         const users = await getUsers();
 

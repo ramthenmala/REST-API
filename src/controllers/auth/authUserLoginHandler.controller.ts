@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import logStatus from "../../utils/logStatus";
-import { getUserByEmail } from "../../db/users";
 import { authentication, random } from "../../utils/auth";
+import { getUserByEmail } from "../../models/user.model";
 
 /**
  * Handler for user login authentication.
